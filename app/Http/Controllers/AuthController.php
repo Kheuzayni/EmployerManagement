@@ -25,9 +25,10 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'username' => 'required',
+            'username' => 'required|unique:users',
             'password' => 'required|min:6|max:8|confirmed',
         ]);
+        // dd($request->all());
         // then if validation is successfully bypassed register user
         // put the whole logic in a try and catch block
         try {
