@@ -14,7 +14,12 @@ class AdminMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {
-        return $next($request);
+    { 
+        if (auth()->user() && auth()->user()->role ==2) { //if admin role
+            # code...
+            return $next($request);
+        }
+        //else return to login page
+        return redirect('/')->with('error', 'You have no permissions to connect like administrator') ;
     }
 }
