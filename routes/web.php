@@ -27,8 +27,6 @@ Route::get('/login/form',[AuthController::class,'loadLoginPage']);
 
 Route::post('/login/user',[AuthController::class,'LoginUser'])->name('LoginUser');
 
-Route::get('/home',[AuthController::class,'loadHomePage']);
-
 Route::get('/logout',[AuthController::class,'LogoutUser']);
 
 Route::get('/forgot/password',[AuthController::class,'forgotPassword']);
@@ -38,3 +36,8 @@ Route::post('/forgot',[AuthController::class,'forgot'])->name('forgot');
 Route::get('/reset/password',[AuthController::class,'loadResetPassword']);
 
 Route::post('/reset/user/password',[AuthController::class,'ResetPassword'])->name('ResetPassword');
+
+Route::group(['middleware'=> ['web', 'checkAdmin']], function () {
+    Route::get('/admin/home',[AuthController::class,'loadHomePage']);
+
+});
