@@ -1,10 +1,10 @@
 
 
-@extends('layout/admin-layout')
+@extends('layout/manager-layout')
 @section('space-work')
-    <h3>Baye Cheikh</h3>
+    <h3>Baye missi diale bi</h3>
     <div class="pagetitle">
-      <h1>Admin Profile</h1>
+      <h1>Manager Profile</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>

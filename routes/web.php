@@ -1,19 +1,12 @@
 <?php
 
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\ManagerMiddleware;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController; // make sure you import the controller
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,7 +30,14 @@ Route::get('/reset/password',[AuthController::class,'loadResetPassword']);
 
 Route::post('/reset/user/password',[AuthController::class,'ResetPassword'])->name('ResetPassword');
 
-Route::group(['middleware'=> ['web', 'checkAdmin']], function () {
-    Route::get('/admin/home',[AuthController::class,'loadHomePage']);
+Route::group(['middleware' => [AdminMiddleware::class]], function () {
+    Route::get('/admin/home', [AuthController::class, 'loadHomePage']);
+    //Route to manage the mananger
+    Route::get('/get/all/managers', [AdminController::class, 'loadAllManagers']);
+    Route::get('/register/manager', [AdminController::class, 'registerManager']);
+});
 
+
+Route::group(['middleware' => [ManagerMiddleware::class]], function () {
+    Route::get('/manager/home', [AuthController::class, 'loadHomePage']);
 });
