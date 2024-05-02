@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Manager;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
     public function loadAllManagers(){
-        return view('admin.manage-manager');
+        $all_Managers = Manager::all();
+        return view('admin.manage-manager', compact('all_Managers'));
     }
 
-    public function registerManager(Request $request){
+    public function RegisterManager(Request $request){
     }
+    
 
 }

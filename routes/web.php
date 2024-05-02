@@ -34,7 +34,7 @@ Route::group(['middleware' => [AdminMiddleware::class]], function () {
     Route::get('/admin/home', [AuthController::class, 'loadHomePage']);
     //Route to manage the mananger
     Route::get('/get/all/managers', [AdminController::class, 'loadAllManagers']);
-    Route::get('/register/manager', [AdminController::class, 'registerManager']);
+    Route::get('/register/manager', [AdminController::class, 'RegisterManager'])->name('RegisterManager');
 });
 
 
