@@ -6,5 +6,7 @@ use Illuminate\Http\Request;
 
 class ManagerController extends Controller
 {
-    //j
+    public function loadManagerHome(){
+        return view('manager.home-page');
+    }
 }

@@ -32,7 +32,7 @@ class AdminController extends Controller
                 $addAsUser = new User;
                 $addAsUser->name = $request->fname . ' ' . $request->lname;
                 $addAsUser->email = $request->email;
-                $addAsUser->password = Hash::make('123456'); // Mot de passe par défaut
+                $addAsUser->password = Hash::make('manager'); // Mot de passe par défaut
                 $addAsUser->role = 1;
                 $addAsUser->save();
 

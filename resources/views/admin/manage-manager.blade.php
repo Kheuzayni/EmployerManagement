@@ -8,31 +8,39 @@
     {{-- these two spans will display flash messages --}}
     <span class="alert alert-success" id="alert-success" style="display: none;"></span>
     <span class="alert alert-danger" id="alert-danger" style="display: none;"></span>
-    <table class="table table-sm table-bordered table-striped">
-      <thead>
+    <table class="table table-hover table-bordered">
+      <thead class="table-primary">
         <tr>
-          <td>Num</td>
-          <td>Name</td>
-          <td>Phone Number</td>
-          <td>Descriptions</td>
-          <td colspan="2">Actions</td>
+          <th scope="col">Num</th>
+          <th scope="col">Name</th>
+          <th scope="col">Phone Number</th>
+          <th scope="col">Descriptions</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
-      @if (count($all_managers) > 0)
-        @foreach ($all_managers as $manager)
+        @forelse ($all_managers as $manager)
           <tr>
-            <td>{{ $loop->iteration }}</td>
+            <th>{{ $loop->iteration }}</th>
             <td>{{ $manager->first_name }} {{ $manager->middle_name }} {{ $manager->last_name }}</td>
             <td>{{ $manager->phone_number }}</td>
             <td>{{ $manager->description }}</td>
+            <td>
+              <!-- Icone pour modifier -->
+              <a href="#" class="btn btn-primary btn-sm me-2">
+                <i class="bi bi-pencil"></i>
+              </a>
+              <!-- Icone pour supprimer -->
+              <a href="#" class="btn btn-danger btn-sm">
+                <i class="bi bi-trash"></i>
+              </a>
+            </td>
           </tr>
-        @endforeach
-      @else
-        <tr>
-          <td colspan="5" style="text-align: center;">No data found</td>
-        </tr>
-      @endif
+        @empty
+          <tr>
+            <td colspan="5" class="text-center">No data found</td>
+          </tr>
+        @endforelse
       </tbody>
     </table>
   </div>
@@ -110,21 +118,53 @@
                     //close modal
                     $('#addModal').modal('hide');
                     // print success message
-                    alert(data.msg);
+                    printSuccessMsg(data.msg);
                     // Refresh page
                     location.reload();
                 } else if(data.success == false){
                     // handle validation errors
-                    $.each(data.msg, function(key, value){
-                        $('#' + key + '_error').text(value[0]);
-                    });
+                    printValidationErrorMsg(data.msg);
                 } else {
-                    alert(data.msg);
+                    // handle other errors
+                    printErrorMsg(data.msg);
                 }
+            },
+            error: function(xhr, status, error) {
+                // handle AJAX errors
+                var errorMessage = xhr.status + ': ' + xhr.statusText;
+                printErrorMsg(errorMessage);
             }
         });
         return false;
     });
+
+    function printEditValidationErrorMsg(msg){
+        $.each(msg, function(field_name, error){
+            // this will find a input id for error 
+            $(document).find('#'+field_name+'_edit_error').text(error);
+        });
+    }
+
+    function printValidationErrorMsg(msg){
+        $.each(msg, function(field_name, error){
+            // this will find a input id for error 
+            $(document).find('#'+field_name+'_error').text(error);
+        });
+    }
+
+    function printErrorMsg(msg){
+      $('#alert-danger').html('');
+      $('#alert-danger').css('display','block');
+      $('#alert-danger').append(''+msg+'');
+    }
+
+    function printSuccessMsg(msg){
+      $('#alert-success').html('');
+      $('#alert-success').css('display','block');
+      $('#alert-success').append(''+msg+'');
+      // if form successfully submitted reset form
+      document.getElementById('addManager').reset();
+    }
 });
 
 </script>

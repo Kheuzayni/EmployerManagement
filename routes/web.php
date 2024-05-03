@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ManagerController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ManagerMiddleware;
 use App\Http\Controllers\AdminController;
@@ -39,5 +40,5 @@ Route::group(['middleware' => [AdminMiddleware::class]], function () {
 
 
 Route::group(['middleware' => [ManagerMiddleware::class]], function () {
-    Route::get('/manager/home', [AuthController::class, 'loadHomePage']);
+    Route::get('/manager/home', [ManagerController::class, 'loadManagerHome']);
 });

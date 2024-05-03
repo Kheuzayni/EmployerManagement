@@ -54,13 +54,13 @@ class AuthController extends Controller
 
     public function LoginUser(Request $request){
         $request->validate([
-            'username' => 'required',
+            'email' => 'required',
             'password' => 'required|min:6|max:8',
         ]);
         // now allow user to login if validation was successfully
         try {
             // login logic here
-            $userCredentials = $request->only('username','password');
+            $userCredentials = $request->only('email','password');
 
             if(Auth::attempt($userCredentials)){
                 // redirect user to home page based on role
