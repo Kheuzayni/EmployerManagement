@@ -36,6 +36,7 @@ Route::group(['middleware' => [AdminMiddleware::class]], function () {
     //Route to manage the mananger
     Route::get('/get/all/managers', [AdminController::class, 'loadAllManagers']);
     Route::post('/register/manager', [AdminController::class, 'RegisterManager'])->name('RegisterManager');
+    Route::get('delete/manager/{id}',[AdminController::class,'deleteManager'])->name('deleteManager'); //this is our delete route manager
 });
 
 
