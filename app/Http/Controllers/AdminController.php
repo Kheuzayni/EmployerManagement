@@ -32,7 +32,7 @@ class AdminController extends Controller
                 $addAsUser = new User;
                 $addAsUser->name = $request->fname . ' ' . $request->lname;
                 $addAsUser->email = $request->email;
-                $addAsUser->password = Hash::make('123456'); // Mot de passe par défaut
+                $addAsUser->password = Hash::make('manager'); // Mot de passe par défaut
                 $addAsUser->role = 1;
                 $addAsUser->save();
 
@@ -50,6 +50,20 @@ class AdminController extends Controller
             } catch (\Exception $e) {
                 return response()->json(['success' => false, 'msg' => $e->getMessage()]);
             }
+        }
+    }
+
+      // delete functionality
+    // in this function i just deleted the managers data from users table only and it will delete data from managers table
+    // this is because users table is a parent table and managers table is a child table also i added this
+    public function deleteManager($user_id){ //for good readability use user_id
+        try {
+            User::where('id',$user_id)->delete();
+            // if success print success msg
+            return response()->json(['success' => true, 'msg' => 'Manager Deleted Successfully']);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         }
     }
 }

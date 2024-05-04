@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('managers', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // Ajoutez les autres colonnes ici
             $table->string('first_name');
             $table->string('middle_name');
             $table->string('last_name');
@@ -21,6 +24,7 @@ return new class extends Migration
             $table->timestamps();
         });
     }
+    
 
     /**
      * Reverse the migrations.

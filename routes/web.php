@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ManagerController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ManagerMiddleware;
 use App\Http\Controllers\AdminController;
@@ -35,9 +36,10 @@ Route::group(['middleware' => [AdminMiddleware::class]], function () {
     //Route to manage the mananger
     Route::get('/get/all/managers', [AdminController::class, 'loadAllManagers']);
     Route::post('/register/manager', [AdminController::class, 'RegisterManager'])->name('RegisterManager');
+    Route::get('delete/manager/{id}',[AdminController::class,'deleteManager'])->name('deleteManager'); //this is our delete route manager
 });
 
 
 Route::group(['middleware' => [ManagerMiddleware::class]], function () {
-    Route::get('/manager/home', [AuthController::class, 'loadHomePage']);
+    Route::get('/manager/home', [ManagerController::class, 'loadManagerHome']);
 });

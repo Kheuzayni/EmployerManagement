@@ -65,9 +65,9 @@
                   <form class="row g-3" action="{{ route('LoginUser')}}" method="POST">
                     @csrf
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Username</label>
+                      <label for="yourUsername" class="form-label">Email</label>
                       <div class="input-group has-validation">
-                        <input type="text" name="username" class="form-control" value="{{old('username')}}">
+                        <input type="text" name="email" class="form-control" value="{{old('email')}}">
                       </div>
                       <span class="text-danger">@error('username'){{$message}}@enderror</span>
                     </div>
