@@ -34,9 +34,10 @@ Route::post('/reset/user/password',[AuthController::class,'ResetPassword'])->nam
 Route::group(['middleware' => [AdminMiddleware::class]], function () {
     Route::get('/admin/home', [AuthController::class, 'loadHomePage']);
     //Route to manage the mananger
-    Route::get('/get/all/managers', [AdminController::class, 'loadAllManagers']);
+    Route::get('/get/all/managers', [AdminController::class, 'loadAllManagers'])->name('loadAllManagers') ;
     Route::post('/register/manager', [AdminController::class, 'RegisterManager'])->name('RegisterManager');
     Route::get('delete/manager/{id}',[AdminController::class,'deleteManager'])->name('deleteManager'); //this is our delete route manager
+    Route::get('/edit/manager',[AdminController::class,'editManager'])->name('editManager');
 });
 
 

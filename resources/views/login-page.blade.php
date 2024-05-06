@@ -52,8 +52,7 @@
                 <div class="card-body">
 
                   <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                    <p class="text-center small">Enter your username & password to login</p>
+                    <h5 class="card-title text-center pb-0 fs-4">Login</h5>
                   </div>
                     {{-- display flash message here --}}
                     @if (Session::has('success'))
@@ -78,7 +77,7 @@
                       <span class="text-danger">@error('password'){{$message}}@enderror</span>
                     </div>
                     <div class="col-12">
-                      <p class="small mb-0">Forgot password? <a href="/forgot/password">Recover here!</a></p>
+                      <a href="/forgot/password">Forgot password?</a>
                     </div>
                     <div class="col-12">
                       <button class="btn btn-primary w-100" type="submit">Login</button>

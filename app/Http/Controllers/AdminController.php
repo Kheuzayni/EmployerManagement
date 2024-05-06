@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Validator;
 class AdminController extends Controller
 {
     public function loadAllManagers(){
-        $all_managers = Manager::all();
+        $all_managers = Manager::join('users','users.id','=','managers.user_id')
+        ->get(['users.email','managers.first_name','managers.middle_name','managers.last_name','managers.phone_number','managers.user_id']);  //here specify columns to select from both two tables
+        //this will join the two 
         return view('admin.manage-manager',compact('all_managers'));
     }
 
@@ -21,7 +23,6 @@ class AdminController extends Controller
             'lname' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required|numeric',
-            'description' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -43,7 +44,6 @@ class AdminController extends Controller
                 $manager->middle_name = $request->mname;
                 $manager->last_name = $request->lname;
                 $manager->phone_number = $request->phone;
-                $manager->description = $request->description;
                 $manager->save();
 
                 return response()->json(['success' => true, 'msg' => 'Manager ajouté avec succès']);
@@ -65,5 +65,47 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         }
+    }
+
+    public function editManager(Request $request){
+        // validate form
+        $validator = Validator::make($request->all(),[
+            'fname' => 'required|string',
+            'mname' => 'required|string',
+            'lname' => 'required|string',
+            'phone' => 'required|numeric',
+            'email' => 'required|email',
+            'manager_id' => 'required|numeric',
+            // now these data come from this form
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['msg' => $validator->errors()->toArray()]);
+        }else{
+            // perform edit functionality here
+            try {
+                Manager::where('user_id',$request->manager_id)->update([
+                    'first_name' => $request->fname,
+                    'middle_name' => $request->mname,
+                    'last_name' => $request->lname,
+                    'phone_number' => $request->phone,
+                ]);
+
+                // i did not update the users table as the name field from users table have no functionality to us for now
+                // so just leave it but for users email it is important as we use it as username for our users
+                // so update just the email as follows
+                User::where('id',$request->manager_id)->update([
+                    'email' => $request->email
+                ]);
+
+                // i think we are good now try to edit the manager
+                return response()->json(['success' => true, 'msg' => 'manager updated successfully']);
+
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+
+            }
+            
+        }
+
     }
 }
