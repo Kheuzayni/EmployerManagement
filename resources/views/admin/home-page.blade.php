@@ -14,6 +14,10 @@
       </nav>
     </div><!-- End Page Title -->
 
+    <div class="text-end mb-3">
+        <a href="{{ route('loadAllManagers') }}" class="btn btn-primary">All Managers</a>
+    </div>
+
     <section class="section profile">
       <div class="row">
         <div class="col-xl-4">
