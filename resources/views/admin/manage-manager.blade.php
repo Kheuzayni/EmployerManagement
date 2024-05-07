@@ -2,7 +2,7 @@
 
 @section('space-work')
 <div class="card">
-  <div class="card-header">All Managers <button type="button" class="btn btn-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#addmodal">Add New</button></div>
+  <div class="card-header">All Managers & Agents <button type="button" class="btn btn-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#addmodal">Add New</button></div>
   <div class="card-body">
      {{-- these two spans will display flash messages --}}
      <span class="alert alert-success" id="alert-success" style="display: none;"></span>
@@ -11,10 +11,11 @@
       <table class="table table-sm table-bordered table-striped">
         <thead>
           <tr>
-            <th>S/N</th>
+            <th>Num</th>
             <th>Name</th>
             <th>Email</th>
             <th>Phone Number</th>
+            <th>Description</th>
             <th colspan="2">Actions</th>
           </tr>
         </thead>
@@ -23,24 +24,29 @@
                 @foreach ($all_managers as $item)
                     <tr>
                         <td>{{$loop->iteration}}</td>
-                        <td>{{$item->first_name}} {{$item->middle_name}} {{$item->last_name}}</td>
+                        <td>{{$item->first_name}} {{$item->last_name}}</td>
                         <td>{{$item->email}}</td>
                         <td>{{$item->phone_number}}</td>
+                        <td>{{$item->description}}</td>
                         <td>
-                          <button class="btn btn-primary btn-sm editBtn" data-id="{{$item->user_id}}" data-fname="{{$item->first_name}}"  data-mname="{{$item->middle_name}}" data-lname="{{$item->last_name}}" data-phone="{{$item->phone_number}}" data-email="{{$item->email}}" data-bs-toggle="modal" data-bs-target="#editModal">
-                            <i class="fas fa-edit"></i>
+                          <button class="btn btn-primary btn-sm editBtn" data-id="{{$item->user_id}}" data-fname="{{$item->first_name}}" data-lname="{{$item->last_name}}" data-phone="{{$item->phone_number}} data-description="{{$item->description}}" data-email="{{$item->email}}" data-bs-toggle="modal" data-bs-target="#editModal">
+                            <i class="fa-regular fa-pen-to-square"></i>
                           </button>
                         </td>
                         <td>
-                          <button class="btn btn-danger btn-sm deleteBtn" data-id="{{$item->user_id}}" data-name="{{$item->name}}" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <button class="btn btn-danger btn-sm deleteBtn" data-id="{{$item->user_id}}" data-name="{{$item->name}}" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                          <i class="fas fa-trash"></i>
+                        </button>
+
+                          <!-- <button class="btn btn-danger btn-sm deleteBtn" data-id="{{$item->user_id}}" data-name="{{$item->name}}" data-bs-toggle="modal" data-bs-target="#deleteModal">
                             <i class="fas fa-trash"></i>
-                          </button>
+                          </button> -->
                         </td>
                     </tr>
                 @endforeach
             @else
                 <tr>
-                  <td colspan="4">No data found!</td>
+                  <td colspan="5">No data found!</td>
                 </tr>
             @endif
         </tbody>
@@ -54,7 +60,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Register New Manager</h5>
+        <h5 class="modal-title">Register New Manager/Agent</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -66,28 +72,33 @@
             <span id="fname_error" class="text-danger"></span>
           </div>
           <div class="col-md-12">
-            <input type="text" class="form-control" placeholder="Your Middle Name" name="mname">
-            <span id="mname_error" class="text-danger"></span>
-          </div>
-          <div class="col-md-12">
             <input type="text" class="form-control" placeholder="Your Last Name" name="lname">
             <span id="lname_error" class="text-danger"></span>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-12">
             <input type="email" class="form-control" placeholder="Email" name="email">
             <span id="email_error" class="text-danger"></span>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-12">
             <input type="text" class="form-control" placeholder="Phone number" name="phone">
             <span id="phone_error" class="text-danger"></span>
+          </div>
+          <div class="col-md-12">
+            <input type="text" class="form-control" placeholder="Description" name="description">
+            <span id="description" class="text-danger"></span>
+          </div>
+          <div class="col-md-12">
+            <select class="form-select" name="role">
+                <option >Select a role for this user</option>
+                <option value="manager">Manager</option>
+                <option value="agent">Agent</option>
+            </select>
           </div>
         <!-- End No Labels Form -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-success addBtn">Save</button> 
-        {{-- make sure the button type attribute is submit --}}
-     
       </div>
     </form>
     </div>
@@ -100,7 +111,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Edit Manager</h5>
+        <h5 class="modal-title">Edit Manager/Agent</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -112,10 +123,6 @@
           <div class="col-md-12">
             <input type="text" class="form-control" placeholder="Your First Name" name="fname" id="fname">
             <span id="fname_edit_error" class="text-danger"></span>
-          </div>
-          <div class="col-md-12">
-            <input type="text" class="form-control" placeholder="Your Middle Name" name="mname" id="mname">
-            <span id="mname_edit_error" class="text-danger"></span>
           </div>
           <div class="col-md-12">
             <input type="text" class="form-control" placeholder="Your Last Name" name="lname" id="lname">
@@ -130,13 +137,15 @@
             <input type="text" class="form-control" placeholder="Phone number" name="phone" id="phone">
             <span id="phone_edit_error" class="text-danger"></span>
           </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Description" name="description" id="description">
+            <span id="description_edit_error" class="text-danger"></span>
+          </div>
         <!-- End No Labels Form -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-succeess editBTN">Update</button> 
-        {{-- make sure the button type attribute is submit --}}
-     
       </div>
     </form>
     </div>
@@ -145,23 +154,26 @@
 {{-- ends here --}}
 
 {{-- delete modal start here --}}
+{{-- delete modal start here --}}
 <div class="modal fade" id="deleteModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Delete Manager</h5>
+        <h5 class="modal-title">Delete Manager/Agent</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-         <div class="card-title text-danger">Are you sure to delete this manager? </div>
+         <div class="card-title text-danger">Are you sure to delete this manager/agent? </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-danger deleteBTN">Yes! Delete it</button> 
+        <button type="button" class="btn btn-danger deleteBTN">Yes! Delete it</button> 
       </div>
     </div>
   </div>
 </div>
+{{-- ends here --}}
+
 {{-- ends here --}}
 
 {{-- our scripts starts here --}}
@@ -173,9 +185,8 @@
     $('#addManager').submit(function(e){
                 e.preventDefault();
                 let formData = $(this).serialize(); //get all form details
-                console.log(formData);
                 $.ajax({
-                    url: '{{ route("RegisterManager")}}', //this is our submission route
+                    url: '{{ route("RegisterUser")}}', //this is our submission route
                     type: 'POST',
                     data: formData,
                     headers: {
@@ -193,13 +204,10 @@
                             $('#addmodal').modal('hide');
                             // print success message
                             printSuccessMsg(data.msg);
-                            var reloadInterval = 5000; //page reload delay duration
-                        // Function to reload the whole page
-                        function reloadPage() {
-                            location.reload(true); // Pass true to force a reload from the server and not from the browser cache
-                        }
-                        // Set an interval to reload the page after the specified time
-                        var intervalId = setInterval(reloadPage, reloadInterval);
+                            //reload the page after 5 seconds
+                            setTimeout(function(){
+                                window.location.reload();
+                            }, 5000);
                         }else if(data.success == false){
                             printErrorMsg(data.msg);
                         }else{
@@ -210,27 +218,24 @@
                 return false;
                 
             });
-            // here i declare the user_id
-            var user_id = 0;
+
             // here delete functionality
             $('.deleteBtn').on('click',function(){
-                 user_id = $(this).attr('data-id');
-                var fname = $(this).attr('data-fname');
-                // delete any car name
+                var user_id = $(this).attr('data-id');
+                var name = $(this).attr('data-name');
                 $('#first_name').html('');
-                // then add the new one..
-                $('#first_name').html(fname);
+                $('#first_name').html(name);
+                $('.deleteBTN').attr('data-id', user_id);
             });
 
             $('.deleteBTN').on('click',function(){
-                var url = "{{ route('deleteManager','user_id')}}";
-                url = url.replace('user_id',user_id);
-                console.log(url);
+                var user_id = $(this).attr('data-id');
+                var deleteUrl = "{{ route('deleteManager', ['id' => ':user_id']) }}".replace(':user_id', user_id);
                 $.ajax({
-                    url: url,
+                    url: deleteUrl,
                     type: 'GET',
                     headers: {
-                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     beforeSend:function(){
                         $('.deleteBTN').prop('disabled', true);
@@ -239,50 +244,37 @@
                         $('.deleteBTN').prop('disabled', false);
                     },
                     success: function(data){
-                        // leave it as it is..
                         if(data.success == true){
-                            // this is the correct way to close modal
                             $('#deleteModal').modal('hide');
                             printSuccessMsg(data.msg);
-                            var reloadInterval = 5000; //page reload delay duration
-                        // Function to reload the whole page
-                        function reloadPage() {
-                            location.reload(true); // Pass true to force a reload from the server and not from the browser cache
-                        }
-                        // Set an interval to reload the page after the specified time
-                        var intervalId = setInterval(reloadPage, reloadInterval);
+                            //reload the page after 5 seconds
+                            setTimeout(function(){
+                                window.location.reload();
+                            }, 5000);
                         }else{
                             printErrorMsg(data.msg);
                         }
-                        // this is because in delete functionality we don't have validations..
                     }
                 });
-
             });
-            // edit car functionality..
+
+            // edit functionality
             $('.editBtn').on('click',function(){
-                // get all car data that we passed on the edit button
-                var manager_id = $(this).attr('data-id'); //this is our user_id
+                var manager_id = $(this).attr('data-id');
                 var fname = $(this).attr('data-fname');
-                var mname = $(this).attr('data-mname');
                 var lname = $(this).attr('data-lname');
                 var phone = $(this).attr('data-phone');
+                var description = $(this).attr('data-description');
                 var email = $(this).attr('data-email');
 
-                // then display them in a edit form
                 $('#fname').val(fname);
-                $('#mname').val(mname);
                 $('#lname').val(lname);
                 $('#phone').val(phone);
+                $('#description').val(description);
                 $('#email').val(email);
                 $('#manager_id').val(manager_id);
-
-                // but here we miss the email field because we don't have the email field from managers table so to achieve this
-                // join managers table and users table to get email also and add it in our form
-               
             });
 
-             // then submit the form
              $('#editManagerForm').submit(function(e){
                     e.preventDefault();
                     let formData = $(this).serialize();
@@ -304,13 +296,10 @@
                             if(data.success == true){
                                 $('#editModal').modal('hide');
                                 printSuccessMsg(data.msg);
-                                var reloadInterval = 5000; //page reload delay duration
-                            // Function to reload the whole page
-                            function reloadPage() {
-                                location.reload(true); 
-                            }
-                            // Set an interval to reload the page after the specified time
-                            var intervalId = setInterval(reloadPage, reloadInterval);
+                                //reload the page after 5 seconds
+                                setTimeout(function(){
+                                    window.location.reload();
+                                }, 5000);
                             }else if(data.success == false){
                                 printErrorMsg(data.msg);
                             }else{
@@ -319,29 +308,29 @@
                     }
                     });
                 });
+
                 function printEditValidationErrorMsg(msg){
                   $.each(msg, function(field_name, error){
-                      // this will find a input id for error 
                       $(document).find('#'+field_name+'_edit_error').text(error);
                   });
                 }
+
                 function printValidationErrorMsg(msg){
                   $.each(msg, function(field_name, error){
-                      // this will find a input id for error 
                       $(document).find('#'+field_name+'_error').text(error);
                   });
                 }
+
                 function printErrorMsg(msg){
                   $('#alert-danger').html('');
                   $('#alert-danger').css('display','block');
                   $('#alert-danger').append(''+msg+'');
                 }
+
                 function printSuccessMsg(msg){
                   $('#alert-success').html('');
                   $('#alert-success').css('display','block');
                   $('#alert-success').append(''+msg+'');
-                  // if form successfully submitted reset form
-                  // document.getElementById('addManager').reset();
                 }
   });
 </script>
