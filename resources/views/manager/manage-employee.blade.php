@@ -2,7 +2,7 @@
 
 @section('space-work')
 <div class="card">
-  <div class="card-header">All Managers & Agents <button type="button" class="btn btn-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#addmodal">Add New</button></div>
+  <div class="card-header">All Agents <button type="button" class="btn btn-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#addmodal">Add New</button></div>
   <div class="card-body">
      {{-- these two spans will display flash messages --}}
      <span class="alert alert-success" id="alert-success" style="display: none;"></span>
@@ -20,8 +20,8 @@
           </tr>
         </thead>
         <tbody>
-            @if (count($all_managers) > 0)
-                @foreach ($all_managers as $item)
+            @if (count($all_agents) > 0)
+                @foreach ($all_agents as $item)
                     <tr>
                         <td>{{$loop->iteration}}</td>
                         <td>{{$item->first_name}} {{$item->last_name}}</td>
@@ -60,12 +60,12 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Register New Manager/Agent</h5>
+        <h5 class="modal-title">Register New Agent</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
          <!-- No Labels Form -->
-         <form class="row g-3" id="addManager" method="POST">
+         <form class="row g-3" id="addAgent" method="POST">
           @csrf
           <div class="col-md-12">
             <input type="text" class="form-control" placeholder="Your First Name" name="fname">
@@ -87,13 +87,6 @@
             <input type="text" class="form-control" placeholder="Description" name="description">
             <span id="description" class="text-danger"></span>
           </div>
-          <div class="col-md-12">
-            <select class="form-select" name="role">
-                <option >Select a role for this user</option>
-                <option value="manager">Manager</option>
-                <option value="agent">Agent</option>
-            </select>
-          </div>
         <!-- End No Labels Form -->
       </div>
       <div class="modal-footer">
@@ -111,15 +104,16 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Edit Manager/Agent</h5>
+        <h5 class="modal-title">Edit Agent</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <!-- No Labels Form -->
-        <form class="row g-3" id="editManagerForm">
-          {{-- this is a hidden manager_id --}}
-          <input type="hidden" name="manager_id" id="manager_id"> 
-          {{-- this input will be hidden, but used to carry the managers user_id --}}
+        <form class="row g-3" id="editAgentForm">
+          @csrf
+          {{-- this is a hidden agent_id --}}
+          <input type="hidden" name="agent_id" id="agent_id"> 
+          {{-- this input will be hidden, but used to carry the agents user_id --}}
           <div class="col-md-12">
             <input type="text" class="form-control" placeholder="Your First Name" name="fname" id="fname">
             <span id="fname_edit_error" class="text-danger"></span>
@@ -151,7 +145,6 @@
     </div>
   </div>
 </div>
-
 {{-- ends here --}}
 
 {{-- delete modal start here --}}
@@ -160,11 +153,11 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Delete Manager/Agent</h5>
+        <h5 class="modal-title">Delete Agent</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-         <div class="card-title text-danger">Are you sure to delete this manager/agent? </div>
+         <div class="card-title text-danger">Are you sure to delete this agent? </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
@@ -183,11 +176,11 @@
 <script>
   $(document).ready(function(){
     // on submit of the form
-    $('#addManager').submit(function(e){
+    $('#addAgent').submit(function(e){
                 e.preventDefault();
                 let formData = $(this).serialize(); //get all form details
                 $.ajax({
-                    url: '{{ route("RegisterUser")}}', //this is our submission route
+                    url: '{{ route("RegisterAgent")}}', //this is our submission route
                     type: 'POST',
                     data: formData,
                     headers: {
@@ -208,7 +201,7 @@
                             //reload the page after 5 seconds
                             setTimeout(function(){
                                 window.location.reload();
-                            }, 5000);
+                            }, 3000);
                         }else if(data.success == false){
                             printErrorMsg(data.msg);
                         }else{
@@ -231,7 +224,7 @@
 
             $('.deleteBTN').on('click',function(){
                 var user_id = $(this).attr('data-id');
-                var deleteUrl = "{{ route('deleteManager', ['id' => ':user_id']) }}".replace(':user_id', user_id);
+                var deleteUrl = "{{ route('deleteAgent', ['id' => ':user_id']) }}".replace(':user_id', user_id);
                 $.ajax({
                     url: deleteUrl,
                     type: 'GET',
@@ -251,7 +244,7 @@
                             //reload the page after 5 seconds
                             setTimeout(function(){
                                 window.location.reload();
-                            }, 5000);
+                            }, 3000);
                         }else{
                             printErrorMsg(data.msg);
                         }
@@ -261,7 +254,7 @@
 
             // edit functionality
             $('.editBtn').on('click',function(){
-                var manager_id = $(this).attr('data-id');
+                var agent_id = $(this).attr('data-id');
                 var fname = $(this).attr('data-fname');
                 var lname = $(this).attr('data-lname');
                 var phone = $(this).attr('data-phone');
@@ -273,15 +266,15 @@
                 $('#phone').val(phone);
                 $('#email').val(email);
                 $('#description').val(description);
-                $('#manager_id').val(manager_id);
+                $('#agent_id').val(agent_id);
             });
 
-             $('#editManagerForm').submit(function(e){
+             $('#editAgentForm').submit(function(e){
                     e.preventDefault();
                     let formData = $(this).serialize();
 
                     $.ajax({
-                        url: '{{ route("editManager")}}',
+                        url: '{{ route("editAgent")}}',
                         data: formData,
                         type: 'POST',
                         headers: {
@@ -300,7 +293,7 @@
                                 //reload the page after 5 seconds
                                 setTimeout(function(){
                                     window.location.reload();
-                                }, 5000);
+                                }, 3000);
                             }else if(data.success == false){
                                 printErrorMsg(data.msg);
                             }else{

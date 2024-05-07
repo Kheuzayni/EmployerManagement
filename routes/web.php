@@ -26,10 +26,9 @@ Route::post('/reset/user/password', [AuthController::class, 'ResetPassword'])->n
 
 // Routes pour l'administrateur
 Route::group(['middleware' => [AdminMiddleware::class]], function () {
-    Route::get('/admin/home', [AuthController::class, 'loadHomePage']);
-
-    // Routes pour gérer les managers
-    Route::get('/get/all/managers', [AdminController::class, 'loadAllManagers'])->name('loadAllManagers');
+    // Routes pour gérer les managers par les admins
+    Route::get('/admin/home', [AdminController::class, 'loadAllManagers'])->name('loadAllManagers');
+    // Route::get('/get/all/managers', [AdminController::class, 'loadAllManagers'])->name('loadAllManagers');
     Route::post('/register/manager', [AdminController::class, 'RegisterUser'])->name('RegisterUser');
     Route::get('/delete/manager/{id}', [AdminController::class, 'deleteManager'])->name('deleteManager');
     Route::post('/edit/manager', [AdminController::class, 'editManager'])->name('editManager');
@@ -37,7 +36,11 @@ Route::group(['middleware' => [AdminMiddleware::class]], function () {
 
 // Routes pour les managers
 Route::group(['middleware' => [ManagerMiddleware::class]], function () {
-    Route::get('/manager/home', [ManagerController::class, 'loadManagerHome']);
+    Route::get('/manager/home', [EmployeeController::class, 'loadEmployeeHome']);
+    // Routes pour gerer les agents par les manageres
+    Route::post('/register/employee', [EmployeeController::class, 'RegisterAgent'])->name('RegisterAgent');
+    Route::get('/delete/employee/{id}', [EmployeeController::class, 'deleteAgent'])->name('deleteAgent');
+    Route::post('/edit/employee', [EmployeeController::class, 'editAgent'])->name('editAgent');
 });
 
 // Routes pour les employee ou agents
