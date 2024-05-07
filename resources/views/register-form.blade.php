@@ -62,7 +62,7 @@
                   @if (Session::has('error'))
                       <div class="alert alert-danger">{{Session::get('error')}}</div>
                   @endif
-                  <form class="row g-3" action="{{ route('registerUser')}}" method="POST">
+                  <form class="row g-3" action="{{ route('registerSuperAdmin')}}" method="POST">
                     @csrf
                     <div class="col-12">
                       <label for="yourName" class="form-label">Your Name</label>

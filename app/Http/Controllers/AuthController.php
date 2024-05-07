@@ -20,7 +20,7 @@ class AuthController extends Controller
         return view("register-form");
     }
 
-    public function registerUser(Request $request){
+    public function registerSuperAdmin(Request $request){
         // perform validation here
         $request->validate([
             'name' => 'required',
